@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.algaworks.algafoodapi.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafoodapi.api.disassembler.FormaPagamentoInputDisassembler;
@@ -39,11 +42,25 @@ public class FormaPagamentoController {
 	private FormaPagamentoService formaPagamentoService;
 
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoModel>> listar() {
-		var formasPagamento = formaPagamentoService.listar();
+	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 
+		var eTag = "0";
+		var dataUltimaAtualizacao = formaPagamentoService.getDataUltimaAtualizacao();
+
+		if (dataUltimaAtualizacao != null) {
+			eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+		}
+
+		if (request.checkNotModified(eTag)) {
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+		}
+
+		var formasPagamento = formaPagamentoService.listar();
 		var formasPagamentoModel = formaPagamentoModelAssembler.toCollectionModel(formasPagamento);
-		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)).body(formasPagamentoModel);
+
+		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()).eTag(eTag)
+				.body(formasPagamentoModel);
 	}
 
 	@GetMapping("/{formaPagamentoId}")
