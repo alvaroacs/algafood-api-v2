@@ -1,10 +1,12 @@
 package com.algaworks.algafoodapi.api.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +43,7 @@ public class FormaPagamentoController {
 		var formasPagamento = formaPagamentoService.listar();
 
 		var formasPagamentoModel = formaPagamentoModelAssembler.toCollectionModel(formasPagamento);
-		return ResponseEntity.ok(formasPagamentoModel);
+		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)).body(formasPagamentoModel);
 	}
 
 	@GetMapping("/{formaPagamentoId}")
@@ -49,7 +51,7 @@ public class FormaPagamentoController {
 		var formaPagamento = formaPagamentoService.buscar(formaPagamentoId);
 		var formaPagamentoModel = formaPagamentoModelAssembler.toModel(formaPagamento);
 
-		return ResponseEntity.ok(formaPagamentoModel);
+		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)).body(formaPagamentoModel);
 	}
 
 	@PostMapping
@@ -61,16 +63,17 @@ public class FormaPagamentoController {
 	}
 
 	@PutMapping("/{formaPagamentoId}")
-	public ResponseEntity<FormaPagamentoModel> atualizar(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
+	public ResponseEntity<FormaPagamentoModel> atualizar(@PathVariable Long formaPagamentoId,
+			@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 		var formaPagamento = formaPagamentoInputDisassembler.toDomainObject(formaPagamentoInput);
 		formaPagamento = formaPagamentoService.atualizar(formaPagamentoId, formaPagamento);
 		var formaPagamentoModel = formaPagamentoModelAssembler.toModel(formaPagamento);
 		return ResponseEntity.ok(formaPagamentoModel);
 	}
-	
+
 	@DeleteMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> remover(@PathVariable Long formaPagamentoId) {
-		formaPagamentoService.remover(formaPagamentoId);		
+		formaPagamentoService.remover(formaPagamentoId);
 		return ResponseEntity.noContent().build();
 	}
 }
