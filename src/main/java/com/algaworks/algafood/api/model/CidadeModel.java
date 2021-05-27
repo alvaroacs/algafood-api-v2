@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
+@Schema(name = "Cidade", description = "Representação de uma cidade")
 public class CidadeModel {
 
 	@Schema(description = "ID da cidades", example = "1")
