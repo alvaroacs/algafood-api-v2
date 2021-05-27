@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.openapi.controller.EstatisticaControllerOpenAPI;
 import com.algaworks.algafood.domain.dto.VendaDiaria;
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.service.VendaQueryService;
@@ -18,7 +19,7 @@ import com.algaworks.algafood.domain.service.VendaReportService;
 
 @RestController
 @RequestMapping(path = "/estatisticas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class EstatisticaController {
+public class EstatisticaController implements EstatisticaControllerOpenAPI {
 
 	@Autowired
 	private VendaQueryService vendaService;
@@ -26,6 +27,7 @@ public class EstatisticaController {
 	@Autowired
 	private VendaReportService vendaReportService;
 
+	@Override
 	@GetMapping("/vendas-diarias")
 	public ResponseEntity<List<VendaDiaria>> consultarVendasDiarias(VendaDiariaFilter filtro,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
@@ -33,6 +35,7 @@ public class EstatisticaController {
 		return ResponseEntity.ok(vendas);
 	}
 
+	@Override
 	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> relatorioVendasDiarias(VendaDiariaFilter filtro,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
