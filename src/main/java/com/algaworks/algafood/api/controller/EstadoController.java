@@ -20,12 +20,13 @@ import com.algaworks.algafood.api.assembler.EstadoModelAssembler;
 import com.algaworks.algafood.api.disassembler.EstadoInputDisassembler;
 import com.algaworks.algafood.api.model.EstadoModel;
 import com.algaworks.algafood.api.model.input.EstadoInput;
+import com.algaworks.algafood.api.openapi.controller.EstadoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.EstadoService;
 
 @RestController
 @RequestMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
-public class EstadoController {
+public class EstadoController implements EstadoControllerOpenAPI {
 	
 	@Autowired
 	private EstadoModelAssembler estadoModelAssembler;
@@ -36,18 +37,21 @@ public class EstadoController {
 	@Autowired
 	private EstadoService estadoService;
 	
+	@Override
 	@GetMapping
 	public ResponseEntity<List<EstadoModel>> listar() {
 		var estadosModel = estadoModelAssembler.toCollectionModel(estadoService.listar());
 		return ResponseEntity.ok(estadosModel);
 	}
 
+	@Override
 	@GetMapping("/{estadoId}")
 	public ResponseEntity<EstadoModel> buscar(@PathVariable Long estadoId) {
 		var estadoModel = estadoModelAssembler.toModel(estadoService.buscar(estadoId));
 		return ResponseEntity.ok(estadoModel);
 	}
 	
+	@Override
 	@PostMapping
 	public ResponseEntity<EstadoModel> adicionar(@RequestBody @Valid EstadoInput estadoInput) {
 		var estado = estadoInputDisassembler.toDomainObject(estadoInput);
@@ -57,6 +61,7 @@ public class EstadoController {
 		return ResponseEntity.created(ApiUtils.uri(estadoModel.getId())).body(estadoModel);
 	}
 	
+	@Override
 	@PutMapping("/{estadoId}")
 	public ResponseEntity<EstadoModel> atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
 		var estado = estadoInputDisassembler.toDomainObject(estadoInput);
@@ -66,6 +71,7 @@ public class EstadoController {
 		return ResponseEntity.ok(estadoModel);
 	}
 	
+	@Override
 	@DeleteMapping("/{estadoId}")
 	public ResponseEntity<Void> remover(@PathVariable Long estadoId) {
 		estadoService.remover(estadoId);
