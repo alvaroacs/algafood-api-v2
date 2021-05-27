@@ -18,13 +18,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Cidades", description = "Gerencia de cidades")
-public interface CidadeControllerOpenapi {
+public interface CidadeControllerOpenAPI {
 
 	@Operation(summary = "Listar", description = "Lista todas as cidades", tags = { "Cidades" })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Sucesso na listagem das cidades", 
 				content = @Content(array = @ArraySchema(schema = @Schema(implementation = CidadeModel.class)))),
-			@ApiResponse(responseCode = "500", description = "Erro interno no servidor", 
+			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) })
 	public ResponseEntity<List<CidadeModel>> listar();
 
@@ -34,7 +34,7 @@ public interface CidadeControllerOpenapi {
 				content = @Content(schema = @Schema(implementation = CidadeModel.class))),
 		@ApiResponse(responseCode = "404", description = "Cidade não encontrada",
 				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "500", description = "Erro interno no servidor",
+		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor",
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
 	public ResponseEntity<CidadeModel> buscar(@Parameter(description = "ID de uma cidade", example = "1") Long cidadeId);
@@ -45,7 +45,7 @@ public interface CidadeControllerOpenapi {
 				content = @Content(schema = @Schema(implementation = CidadeModel.class))),
 		@ApiResponse(responseCode = "400", description = "Problema no envio do recurso",
 				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "500", description = "Erro interno no servidor",
+		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor",
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
 	public ResponseEntity<CidadeModel> adicionar(
@@ -62,7 +62,7 @@ public interface CidadeControllerOpenapi {
 				content = @Content(schema = @Schema(implementation = Problem.class))),
 		@ApiResponse(responseCode = "404", description = "Cidade não encontrada", 
 				content = @Content(schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "500", description = "Erro interno no servidor", 
+		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
 	public ResponseEntity<CidadeModel> atualizar(

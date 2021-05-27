@@ -16,7 +16,7 @@ import lombok.Getter;
 @Builder
 public class Problem {
 
-	@Schema(description = "Status code", example = "404")
+	@Schema(description = "Status code", example = "000")
 	private Integer status;
 	
 	@Schema(description = "URL to the problem page", example = "https://algafood.com.br/recurso-nao-encontrado")

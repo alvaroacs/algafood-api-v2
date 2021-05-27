@@ -21,12 +21,13 @@ import com.algaworks.algafood.api.assembler.CozinhaModelAssembler;
 import com.algaworks.algafood.api.disassembler.CozinhaInputDisassembler;
 import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.input.CozinhaInput;
+import com.algaworks.algafood.api.openapi.controller.CozinhaControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.CozinhaService;
 
 @RestController
 @RequestMapping(path = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenAPI {
 	
 	@Autowired
 	private CozinhaModelAssembler cozinhaModelAssembler;
@@ -37,6 +38,7 @@ public class CozinhaController {
 	@Autowired
 	private CozinhaService cozinhaService;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<Page<CozinhaModel>> listar(Pageable pageable) {
 		var cozinhasPage = cozinhaService.listar(pageable);
@@ -45,14 +47,16 @@ public class CozinhaController {
 		return ResponseEntity.ok(cozinhasModelPage);
 	}
 	
+	@Override
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity<CozinhaModel> buscar(@PathVariable Long cozinhaId) {
 		var cozinhaModel = cozinhaModelAssembler.toModel(cozinhaService.buscar(cozinhaId));
 		return ResponseEntity.ok(cozinhaModel);
 	}
 	
+	@Override
 	@PostMapping
-	public ResponseEntity<CozinhaModel> criar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+	public ResponseEntity<CozinhaModel> adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		var cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
 		cozinha = cozinhaService.adicionar(cozinha);
 		
@@ -60,6 +64,7 @@ public class CozinhaController {
 		return ResponseEntity.created(ApiUtils.uri(cozinhaModel.getId())).body(cozinhaModel);
 	}
 	
+	@Override
 	@PutMapping("/{cozinhaId}")
 	public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 		var cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
@@ -69,6 +74,7 @@ public class CozinhaController {
 		return ResponseEntity.ok(cozinhaModel);
 	}
 	
+	@Override
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Void> remover(@PathVariable Long cozinhaId) {
 		cozinhaService.remover(cozinhaId);

@@ -20,13 +20,13 @@ import com.algaworks.algafood.api.assembler.CidadeModelAssembler;
 import com.algaworks.algafood.api.disassembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.api.model.input.CidadeInput;
-import com.algaworks.algafood.api.openapi.controller.CidadeControllerOpenapi;
+import com.algaworks.algafood.api.openapi.controller.CidadeControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.CidadeService;
 
 @RestController
 @RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeController implements CidadeControllerOpenapi {
+public class CidadeController implements CidadeControllerOpenAPI {
 
 	@Autowired
 	private CidadeModelAssembler cidadeModelAssembler;
