@@ -26,6 +26,8 @@
 		<!-- S3 Amazon -->
 		<aws-java-sdk-s3.version>1.11.671</aws-java-sdk-s3.version>
 
+		<!-- OpenAPI -->
+		<openapi-version>1.5.9</openapi-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -78,6 +80,17 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
+		<!-- OpenAPI -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-data-rest</artifactId>
+			<version>${openapi-version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
