@@ -65,7 +65,10 @@ public interface CidadeControllerOpenapi {
 		@ApiResponse(responseCode = "500", description = "Erro interno no servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	public ResponseEntity<CidadeModel> atualizar(Long cidadeId, CidadeInput cidadeInput);
+	public ResponseEntity<CidadeModel> atualizar(
+			@Parameter(description = "ID da cidade que está buscando", example = "1", required = true) Long cidadeId, 
+			@Parameter(description = "Cidade com os dados atualizados", required = true, 
+				content = { @Content(schema = @Schema(implementation = CidadeInput.class)) }) CidadeInput cidadeInput);
 
 	@Operation(summary = "Remover", description = "Remove uma cidade pelo ID", tags = { "Cidades" })
 	@ApiResponses({
@@ -78,5 +81,5 @@ public interface CidadeControllerOpenapi {
 		@ApiResponse(responseCode = "500", description = "Erro interno no servidor",
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	public ResponseEntity<Void> remover(Long cidadeId);
+	public ResponseEntity<Void> remover(@Parameter(description = "ID da cidade para remoção", example = "1") Long cidadeId);
 }
