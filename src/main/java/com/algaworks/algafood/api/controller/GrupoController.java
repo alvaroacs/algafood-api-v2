@@ -20,12 +20,13 @@ import com.algaworks.algafood.api.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.disassembler.GrupoInputDisassembler;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.model.input.GrupoInput;
+import com.algaworks.algafood.api.openapi.controller.GrupoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.GrupoService;
 
 @RestController
 @RequestMapping(path = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenAPI {
 	
 	@Autowired
 	private GrupoModelAssembler grupoModelAssembler;
@@ -36,18 +37,21 @@ public class GrupoController {
 	@Autowired
 	private GrupoService grupoService;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<List<GrupoModel>> listar() {
 		var gruposModel = grupoModelAssembler.toCollectionModel(grupoService.listar());
 		return ResponseEntity.ok(gruposModel);
 	}
 	
+	@Override
 	@GetMapping("/{grupoId}")
 	public ResponseEntity<GrupoModel> buscar(@PathVariable Long grupoId) {
 		var grupoModel = grupoModelAssembler.toModel(grupoService.buscar(grupoId));
 		return ResponseEntity.ok(grupoModel);
 	}
 	
+	@Override
 	@PostMapping
 	public ResponseEntity<GrupoModel> adicionar(@RequestBody @Valid GrupoInput grupoInput) {
 		var grupo = grupoService.adicionar(grupoInputDisassembler.toDomainObject(grupoInput));
@@ -55,6 +59,7 @@ public class GrupoController {
 		return ResponseEntity.created(ApiUtils.uri(grupoModel.getId())).body(grupoModel);
 	}
 	
+	@Override
 	@PutMapping("/{grupoId}")
 	public ResponseEntity<GrupoModel> atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
 		var grupo = grupoInputDisassembler.toDomainObject(grupoInput);
@@ -62,6 +67,7 @@ public class GrupoController {
 		return ResponseEntity.ok(grupoModel);
 	}
 	
+	@Override
 	@DeleteMapping("/{grupoId}")
 	public ResponseEntity<Void> remover(@PathVariable Long grupoId) {
 		grupoService.remover(grupoId);

@@ -26,7 +26,8 @@ public interface FormaPagamentoControllerOpenAPI {
 			@ApiResponse(responseCode = "200", description = "Sucesso na listagem das formas de pagamento", 
 				content = @Content(array = @ArraySchema(schema = @Schema(implementation = FormaPagamentoModel.class)))),
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
-				content = @Content(schema = @Schema(implementation = Problem.class))) })
+				content = @Content(schema = @Schema(implementation = Problem.class))) 
+	})
 	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request);
 
 	@Operation(summary = "Buscar", description = "Busca uma forma de pagamento pelo ID", tags = { "Formas de Pagamento" })
