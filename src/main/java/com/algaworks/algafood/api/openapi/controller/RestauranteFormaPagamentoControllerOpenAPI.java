@@ -19,10 +19,10 @@ public interface RestauranteFormaPagamentoControllerOpenAPI {
 
 	@Operation(summary = "Listar formas de pagamento", description = "Lista as formas de pagamento associadas", tags = { "Restaurantes" })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Sucesso na listagem das formas de pagamento", 
-				content = @Content(array = @ArraySchema(schema = @Schema(implementation = FormaPagamentoModel.class)))),
-			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
-				content = @Content(schema = @Schema(implementation = Problem.class))) 
+		@ApiResponse(responseCode = "200", description = "Sucesso na listagem das formas de pagamento", 
+			content = @Content(array = @ArraySchema(schema = @Schema(implementation = FormaPagamentoModel.class)))),
+		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
+			content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
 	public ResponseEntity<List<FormaPagamentoModel>> listar(
 			@Parameter(description = "ID do restaurante", example = "1", required = true)

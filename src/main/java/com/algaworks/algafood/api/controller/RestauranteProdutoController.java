@@ -20,12 +20,13 @@ import com.algaworks.algafood.api.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.disassembler.ProdutoInputDisassembler;
 import com.algaworks.algafood.api.model.ProdutoModel;
 import com.algaworks.algafood.api.model.input.ProdutoInput;
+import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.ProdutoService;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/produtos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestauranteProdutoController {
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenAPI {
 
 	@Autowired
 	private ProdutoModelAssembler produtoModelAssembler;
@@ -36,6 +37,7 @@ public class RestauranteProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 	
+	@Override
 	@GetMapping
 	public ResponseEntity<List<ProdutoModel>> listar(@PathVariable Long restauranteId, 
 			@RequestParam(name = "incluir-inativos", required = false, defaultValue = "false") boolean incluirInativos) {
@@ -44,6 +46,7 @@ public class RestauranteProdutoController {
 		return ResponseEntity.ok(produtosModel);
 	}
 	
+	@Override
 	@GetMapping("/{produtoId}")
 	public ResponseEntity<ProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		var produto = produtoService.buscar(restauranteId, produtoId);
@@ -51,6 +54,7 @@ public class RestauranteProdutoController {
 		return ResponseEntity.ok(produtoModel);
 	}
 	
+	@Override
 	@PostMapping
 	public ResponseEntity<ProdutoModel> adicionar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
 		var produto = produtoInputDisassembler.toDomainObject(produtoInput);
@@ -59,6 +63,7 @@ public class RestauranteProdutoController {
 		return ResponseEntity.created(ApiUtils.uri(produtoModel.getId())).body(produtoModel);
 	}
 	
+	@Override
 	@PutMapping("/{produtoId}")
 	public ResponseEntity<ProdutoModel> atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, 
 			@RequestBody @Valid ProdutoInput produtoInput) {
