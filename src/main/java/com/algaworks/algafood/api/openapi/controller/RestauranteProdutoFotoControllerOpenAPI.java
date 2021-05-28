@@ -33,6 +33,7 @@ public interface RestauranteProdutoFotoControllerOpenAPI {
 			@Parameter(description = "ID do restaurante", example = "1", required = true) Long restauranteId, 
 			@Parameter(description = "ID do produto", example = "1", required = true) Long produtoId);
 	
+	@Operation(tags = { "Produtos" }, hidden = true)
 	public ResponseEntity<?> servir(Long restauranteId, Long produtoId,
 			String acceptHeader) throws HttpMediaTypeNotAcceptableException;
 

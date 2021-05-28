@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.model.UsuarioModel;
+import com.algaworks.algafood.api.openapi.controller.RestauranteResponsavelControllerOpenAPI;
 import com.algaworks.algafood.domain.service.RestauranteResponsavelService;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/responsaveis", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestauranteResponsavelController {
+public class RestauranteResponsavelController implements RestauranteResponsavelControllerOpenAPI {
 
 	@Autowired
 	private UsuarioModelAssembler usuarioModelAssembler;
@@ -26,6 +27,7 @@ public class RestauranteResponsavelController {
 	@Autowired
 	private RestauranteResponsavelService restauranteResponsavelService;
 	
+	@Override
 	@GetMapping
 	public ResponseEntity<List<UsuarioModel>> listar(@PathVariable Long restauranteId) {
 		var usuarios = restauranteResponsavelService.listar(restauranteId);
@@ -33,12 +35,14 @@ public class RestauranteResponsavelController {
 		return ResponseEntity.ok(usuariosModel);
 	}
 	
+	@Override
 	@PutMapping("/{responsavelId}")
 	public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long responsavelId) {
 		restauranteResponsavelService.associar(restauranteId, responsavelId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@DeleteMapping("/{responsavelId}")
 	public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long responsavelId) {
 		restauranteResponsavelService.desassociar(restauranteId, responsavelId);
