@@ -20,12 +20,13 @@ import com.algaworks.algafood.api.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.api.disassembler.PermissaoInputDisassembler;
 import com.algaworks.algafood.api.model.PermissaoModel;
 import com.algaworks.algafood.api.model.input.PermissaoInput;
+import com.algaworks.algafood.api.openapi.controller.PermissaoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.PermissaoService;
 
 @RestController
 @RequestMapping(path = "/permissoes", produces = MediaType.APPLICATION_JSON_VALUE)
-public class PermissaoController {
+public class PermissaoController implements PermissaoControllerOpenAPI {
 
 	@Autowired
 	private PermissaoModelAssembler permissaoModelAssembler;
@@ -36,6 +37,7 @@ public class PermissaoController {
 	@Autowired
 	private PermissaoService permissaoService;
 	
+	@Override
 	@GetMapping
 	public ResponseEntity<List<PermissaoModel>> listar() {
 		var permissoes = permissaoService.listar();
@@ -43,6 +45,7 @@ public class PermissaoController {
 		return ResponseEntity.ok(permissoesModel);
 	}
 	
+	@Override
 	@GetMapping("/{permissaoId}")
 	public ResponseEntity<PermissaoModel> buscar(@PathVariable Long permissaoId) {
 		var permissao = permissaoService.buscar(permissaoId);
@@ -50,6 +53,7 @@ public class PermissaoController {
 		return ResponseEntity.ok(permissaoModel);
 	}
 	
+	@Override
 	@PostMapping
 	public ResponseEntity<PermissaoModel> adicionar(@RequestBody @Valid PermissaoInput permissaoInput) {
 		var permissao = permissaoInputDisassembler.toDomainObject(permissaoInput);
@@ -58,6 +62,7 @@ public class PermissaoController {
 		return ResponseEntity.created(ApiUtils.uri(permissaoModel.getId())).body(permissaoModel);
 	}
 	
+	@Override
 	@PutMapping("/{permissaoId}")
 	public ResponseEntity<PermissaoModel> atualizar(@PathVariable Long permissaoId, @RequestBody PermissaoInput permissaoInput) {
 		var permissao = permissaoInputDisassembler.toDomainObject(permissaoInput);
@@ -66,6 +71,7 @@ public class PermissaoController {
 		return ResponseEntity.ok(permissaoModel);
 	}
 	
+	@Override
 	@DeleteMapping("/{permissaoId}")
 	public ResponseEntity<Void> remover(@PathVariable Long permissaoId) {
 		permissaoService.remover(permissaoId);

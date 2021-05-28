@@ -25,7 +25,8 @@ public interface CidadeControllerOpenAPI {
 			@ApiResponse(responseCode = "200", description = "Sucesso na listagem das cidades", 
 				content = @Content(array = @ArraySchema(schema = @Schema(implementation = CidadeModel.class)))),
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
-				content = @Content(schema = @Schema(implementation = Problem.class))) })
+				content = @Content(schema = @Schema(implementation = Problem.class))) 
+	})
 	public ResponseEntity<List<CidadeModel>> listar();
 
 	@Operation(summary = "Buscar", description = "Busca uma cidade pelo ID", tags = { "Cidades" })

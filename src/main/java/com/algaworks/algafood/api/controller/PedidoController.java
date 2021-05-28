@@ -20,6 +20,7 @@ import com.algaworks.algafood.api.disassembler.PedidoInputDisassembler;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Usuario;
@@ -27,7 +28,7 @@ import com.algaworks.algafood.domain.service.PedidoService;
 
 @RestController
 @RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenAPI {
 
 	@Autowired
 	private PedidoModelAssembler pedidoModelAssembler;
@@ -38,6 +39,7 @@ public class PedidoController {
 	@Autowired
 	private PedidoService pedidoService;
 	
+	@Override
 	@GetMapping
 	public ResponseEntity<Page<PedidoResumoModel>> pesquisar(PedidoFilter pedidoFilter, Pageable pageable) {
 		var pedidosPage = pedidoService.pesquisar(pedidoFilter, pageable);
@@ -46,6 +48,7 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidosModelPage);
 	}
 	
+	@Override
 	@GetMapping("/{pedidoCodigo}")
 	public ResponseEntity<PedidoModel> buscar(@PathVariable String pedidoCodigo) {
 		var pedido = pedidoService.buscar(pedidoCodigo);
@@ -53,6 +56,7 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidoModel);
 	}
 	
+	@Override
 	@PostMapping
 	public ResponseEntity<PedidoModel> emitir(@RequestBody @Valid PedidoInput pedidoInput) {
 		var pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);

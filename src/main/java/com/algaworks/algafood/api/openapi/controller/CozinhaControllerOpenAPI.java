@@ -28,9 +28,7 @@ public interface CozinhaControllerOpenAPI {
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
 	public ResponseEntity<Page<CozinhaModel>> listar(
-			@Parameter(required = false, allowEmptyValue = true, 
-				content = @Content(schema = @Schema(implementation = Pageable.class))) 
-			Pageable pageable);
+			@Parameter(required = false, allowEmptyValue = true) Pageable pageable);
 	
 	@Operation(summary = "Buscar", description = "Busca uma cozinha pelo ID", tags = { "Cozinhas" })
 	@ApiResponses({
