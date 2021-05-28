@@ -18,7 +18,7 @@ import com.algaworks.algafood.domain.service.VendaQueryService;
 import com.algaworks.algafood.domain.service.VendaReportService;
 
 @RestController
-@RequestMapping(path = "/estatisticas", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/estatisticas")
 public class EstatisticaController implements EstatisticaControllerOpenAPI {
 
 	@Autowired
@@ -28,7 +28,7 @@ public class EstatisticaController implements EstatisticaControllerOpenAPI {
 	private VendaReportService vendaReportService;
 
 	@Override
-	@GetMapping("/vendas-diarias")
+	@GetMapping(path = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<VendaDiaria>> consultarVendasDiarias(VendaDiariaFilter filtro,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
 		var vendas = vendaService.consultarVendasDiarias(filtro, timeOffset);
