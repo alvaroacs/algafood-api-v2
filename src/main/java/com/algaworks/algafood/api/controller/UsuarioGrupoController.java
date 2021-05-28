@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.model.GrupoModel;
+import com.algaworks.algafood.api.openapi.controller.UsuarioGrupoControllerOpenAPI;
 import com.algaworks.algafood.domain.service.UsuarioGrupoService;
 
 @RestController
-@RequestMapping(path = "/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+@RequestMapping(path = "/usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenAPI {
 
 	@Autowired
 	private GrupoModelAssembler grupoModelAssembler;
@@ -25,6 +27,7 @@ public class UsuarioGrupoController {
 	@Autowired
 	private UsuarioGrupoService usuarioGrupoService;
 	
+	@Override
 	@GetMapping
 	public ResponseEntity<List<GrupoModel>> listar(@PathVariable Long usuarioId) {
 		var grupos = usuarioGrupoService.listar(usuarioId);
@@ -32,12 +35,14 @@ public class UsuarioGrupoController {
 		return ResponseEntity.ok(gruposModel);
 	}
 	
+	@Override
 	@PutMapping("/{grupoId}")
 	public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		usuarioGrupoService.associar(usuarioId, grupoId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@DeleteMapping("/{grupoId}")
 	public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
 		usuarioGrupoService.desassociar(usuarioId, grupoId);
