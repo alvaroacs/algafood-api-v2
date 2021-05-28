@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.api.model.PermissaoModel;
+import com.algaworks.algafood.api.openapi.controller.GrupoPermissaoControllerOpenAPI;
 import com.algaworks.algafood.domain.service.GrupoPermissaoService;
 
 @RestController
 @RequestMapping(path = "/grupos/{grupoId}/permissoes", produces = MediaType.APPLICATION_JSON_VALUE)
-public class GrupoPermissaoController {
+public class GrupoPermissaoController implements GrupoPermissaoControllerOpenAPI {
 
 	@Autowired
 	private PermissaoModelAssembler permissaoModelAssembler;
