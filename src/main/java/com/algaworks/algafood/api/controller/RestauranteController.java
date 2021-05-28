@@ -21,12 +21,13 @@ import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.disassembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
+import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
 @RestController
 @RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenAPI {
 
 	@Autowired
 	private RestauranteService restauranteService;
@@ -37,6 +38,7 @@ public class RestauranteController {
 	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<List<RestauranteModel>> listar() {
 		var restaurantesModel = restauranteModelAssembler.toCollectionModel(restauranteService.listar());
@@ -44,6 +46,7 @@ public class RestauranteController {
 		return ResponseEntity.ok(restaurantesModel);
 	}
 
+	@Override
 	@GetMapping("/lista-personalizada")
 	public ResponseEntity<List<RestauranteModel>> listarPersonalizado(String nome, BigDecimal taxaFreteInicial,
 			BigDecimal taxaFreteFinal) {
@@ -54,6 +57,7 @@ public class RestauranteController {
 		return ResponseEntity.ok(restaurantesModel);
 	}
 
+	@Override
 	@GetMapping("/{restauranteId}")
 	public ResponseEntity<RestauranteModel> buscar(@PathVariable Long restauranteId) {
 		var restauranteModel = restauranteModelAssembler.toModel(restauranteService.buscar(restauranteId));
@@ -61,6 +65,7 @@ public class RestauranteController {
 		return ResponseEntity.ok(restauranteModel);
 	}
 
+	@Override
 	@PostMapping
 	public ResponseEntity<RestauranteModel> adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		var restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
@@ -71,6 +76,7 @@ public class RestauranteController {
 		return ResponseEntity.created(ApiUtils.uri(restauranteModel.getId())).body(restauranteModel);
 	}
 
+	@Override
 	@PutMapping("/{restauranteId}")
 	public ResponseEntity<RestauranteModel> atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteInput restauranteInput) {
@@ -82,36 +88,42 @@ public class RestauranteController {
 		return ResponseEntity.ok(restauranteModel);
 	}
 	
+	@Override
 	@PutMapping("/{restauranteId}/ativo")
 	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
 		restauranteService.ativar(restauranteId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@PutMapping("/ativacoes")
 	public ResponseEntity<Void> ativar(@RequestBody List<Long> restaurantesId) {
 		restauranteService.ativar(restaurantesId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@DeleteMapping("/{restauranteId}/ativo")
 	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
 		restauranteService.inativar(restauranteId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@DeleteMapping("/ativacoes")
 	public ResponseEntity<Void> inativar(@RequestBody List<Long> restaurantesId) {
 		restauranteService.inativar(restaurantesId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@PutMapping("/{restauranteId}/abertura")
 	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		restauranteService.abrir(restauranteId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	@DeleteMapping("/{restauranteId}/fechamento")
 	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		restauranteService.fechar(restauranteId);
