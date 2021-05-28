@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 public class FotoProdutoInput {
 
-	@Schema(description = "Arquivo", example = "foto.png", required = true)
+	@Schema(description = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)", required = true)
 	@NotNull
 	@FileSize(max = "500KB")
 	@FileContentType(allowed = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })

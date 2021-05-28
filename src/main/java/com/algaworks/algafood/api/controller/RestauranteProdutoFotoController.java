@@ -23,13 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.model.FotoProdutoModel;
 import com.algaworks.algafood.api.model.input.FotoProdutoInput;
+import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenAPI;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenAPI {
 
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
@@ -37,6 +38,7 @@ public class RestauranteProdutoFotoController {
 	@Autowired
 	private CatalogoFotoProdutoService catalogoFotoProdutoService;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<FotoProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		var fotoProduto = catalogoFotoProdutoService.buscar(restauranteId, produtoId);
@@ -44,6 +46,7 @@ public class RestauranteProdutoFotoController {
 		return ResponseEntity.ok(fotoProdutoModel);
 	}
 
+	@Override
 	@GetMapping(produces = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
 	public ResponseEntity<?> servir(@PathVariable Long restauranteId, @PathVariable Long produtoId,
 			@RequestHeader(name = "Accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
@@ -67,6 +70,7 @@ public class RestauranteProdutoFotoController {
 		}
 	}
 
+	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<FotoProdutoModel> atualizarFoto(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
@@ -86,6 +90,7 @@ public class RestauranteProdutoFotoController {
 		return ResponseEntity.ok(fotoProdutoModel);
 	}
 
+	@Override
 	@DeleteMapping
 	public ResponseEntity<Void> remover(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		catalogoFotoProdutoService.remover(restauranteId, produtoId);
