@@ -25,12 +25,13 @@ import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.disassembler.FormaPagamentoInputDisassembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
+import com.algaworks.algafood.api.openapi.controller.FormaPagamentoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.domain.service.FormaPagamentoService;
 
 @RestController
 @RequestMapping(path = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenAPI {
 
 	@Autowired
 	private FormaPagamentoModelAssembler formaPagamentoModelAssembler;
@@ -41,6 +42,7 @@ public class FormaPagamentoController {
 	@Autowired
 	private FormaPagamentoService formaPagamentoService;
 
+	@Override
 	@GetMapping
 	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -63,6 +65,7 @@ public class FormaPagamentoController {
 				.body(formasPagamentoModel);
 	}
 
+	@Override
 	@GetMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId) {
 		var formaPagamento = formaPagamentoService.buscar(formaPagamentoId);
@@ -71,6 +74,7 @@ public class FormaPagamentoController {
 		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)).body(formaPagamentoModel);
 	}
 
+	@Override
 	@PostMapping
 	public ResponseEntity<FormaPagamentoModel> adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 		var formaPagamento = formaPagamentoInputDisassembler.toDomainObject(formaPagamentoInput);
@@ -79,6 +83,7 @@ public class FormaPagamentoController {
 		return ResponseEntity.created(ApiUtils.uri(formaPagamentoModel.getId())).body(formaPagamentoModel);
 	}
 
+	@Override
 	@PutMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> atualizar(@PathVariable Long formaPagamentoId,
 			@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -88,6 +93,7 @@ public class FormaPagamentoController {
 		return ResponseEntity.ok(formaPagamentoModel);
 	}
 
+	@Override
 	@DeleteMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> remover(@PathVariable Long formaPagamentoId) {
 		formaPagamentoService.remover(formaPagamentoId);

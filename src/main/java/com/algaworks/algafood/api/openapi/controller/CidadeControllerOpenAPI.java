@@ -30,7 +30,7 @@ public interface CidadeControllerOpenAPI {
 
 	@Operation(summary = "Buscar", description = "Busca uma cidade pelo ID", tags = { "Cidades" })
 	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "Sucesso ao buscar de uma cidade",
+		@ApiResponse(responseCode = "200", description = "Sucesso ao buscar uma cidade",
 				content = @Content(schema = @Schema(implementation = CidadeModel.class))),
 		@ApiResponse(responseCode = "404", description = "Cidade não encontrada",
 				content = @Content(schema = @Schema(implementation = Problem.class))),
@@ -53,8 +53,7 @@ public interface CidadeControllerOpenAPI {
 				content = {@Content(schema = @Schema(implementation = CidadeInput.class))}) 
 			CidadeInput cidadeInput);
 
-	@Operation(summary = "Atualizar", description = "Atualiza uma cidade com as novas informações", tags = {
-			"Cidades" })
+	@Operation(summary = "Atualizar", description = "Atualiza uma cidade com as novas informações", tags = { "Cidades" })
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "Cidade Atualizada", 
 				content = @Content(schema = @Schema(implementation = CidadeModel.class))),
