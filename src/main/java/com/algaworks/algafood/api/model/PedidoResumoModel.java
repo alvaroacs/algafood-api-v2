@@ -3,13 +3,17 @@ package com.algaworks.algafood.api.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+@Relation(collectionRelation = "pedidos")
 @Getter
 @Setter
-public class PedidoResumoModel {
+public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
 
 	@Schema(description = "Código do pedido", example = "b5741512-8fbc-47fa-9ac1-b530354fc0ff")
 	private String codigo;

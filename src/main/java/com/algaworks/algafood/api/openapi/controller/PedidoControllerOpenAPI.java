@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -28,7 +28,7 @@ public interface PedidoControllerOpenAPI {
 		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor",
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	public ResponseEntity<Page<PedidoResumoModel>> pesquisar(
+	public ResponseEntity<PagedModel<PedidoResumoModel>> pesquisar(
 			@Parameter(description = "Filtro de pesquisa do pedido", 
 				content = { @Content(schema =  @Schema(implementation = PedidoFilter.class)) })
 			PedidoFilter pedidoFilter, 
