@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -21,13 +21,13 @@ public interface CozinhaControllerOpenAPI {
 	
 	//TODO: corrigir a resposta e o parametro
 	@Operation(summary = "Listar", description = "Lista todas as cozinhas", tags = { "Cozinhas" })
-	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "Sucesso na listagem de cozinhas",
-				content = @Content),
-		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor",
-				content = @Content(schema = @Schema(implementation = Problem.class)))
-	})
-	public ResponseEntity<Page<CozinhaModel>> listar(
+//	@ApiResponses({
+//		@ApiResponse(responseCode = "200", description = "Sucesso na listagem de cozinhas",
+//				content = @Content),
+//		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor",
+//				content = @Content(schema = @Schema(implementation = Problem.class)))
+//	})
+	public ResponseEntity<PagedModel<CozinhaModel>> listar(
 			@Parameter(required = false, allowEmptyValue = true) Pageable pageable);
 	
 	@Operation(summary = "Buscar", description = "Busca uma cozinha pelo ID", tags = { "Cozinhas" })
