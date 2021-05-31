@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +39,7 @@ public class UsuarioController implements UsuarioControllerOpenAPI {
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<UsuarioModel>> listar() {
+	public ResponseEntity<CollectionModel<UsuarioModel>> listar() {
 		var usuariosModel = usuarioModelAssembler.toCollectionModel(usuarioService.listar());
 		return ResponseEntity.ok(usuariosModel);
 	}

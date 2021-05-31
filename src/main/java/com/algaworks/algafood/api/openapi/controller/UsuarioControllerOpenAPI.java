@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -29,7 +28,7 @@ public interface UsuarioControllerOpenAPI {
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<UsuarioModel>> listar();
+	public ResponseEntity<CollectionModel<UsuarioModel>> listar();
 
 	@Operation(summary = "Buscar", description = "Busca um usuário pelo ID", tags = { "Usuarios" })
 	@ApiResponses({
