@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +38,7 @@ public class CidadeController implements CidadeControllerOpenAPI {
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<CidadeModel>> listar() {
+	public ResponseEntity<CollectionModel<CidadeModel>> listar() {
 		var cidadesModel = cidadeModelAssembler.toCollectionModel(cidadeService.listar());
 		return ResponseEntity.ok(cidadesModel);
 	}
