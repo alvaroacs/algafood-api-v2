@@ -3,6 +3,7 @@ package com.algaworks.algafood.api.openapi.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -28,7 +29,7 @@ public interface RestauranteControllerOpenAPI {
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<RestauranteModel>> listar();
+	public ResponseEntity<CollectionModel<RestauranteModel>> listar();
 
 	@Operation(summary = "Lista personalizada", description = "Lista os restaurantes", tags = { "Restaurantes" })
 	@ApiResponses(value = {
@@ -37,7 +38,7 @@ public interface RestauranteControllerOpenAPI {
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<RestauranteModel>> listarPersonalizado(
+	public ResponseEntity<CollectionModel<RestauranteModel>> listarPersonalizado(
 			@Parameter(description = "Nome do restaurante", example = "Tuk Tuk") String nome, 
 			@Parameter(description = "Taxa frete - valor inicial", example = "1") BigDecimal taxaFreteInicial,
 			@Parameter(description = "Taxa frete - valor final", example = "10") BigDecimal taxaFreteFinal);

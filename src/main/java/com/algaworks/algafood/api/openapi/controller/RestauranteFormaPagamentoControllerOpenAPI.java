@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -24,7 +23,7 @@ public interface RestauranteFormaPagamentoControllerOpenAPI {
 		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 			content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<FormaPagamentoModel>> listar(
+	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(
 			@Parameter(description = "ID do restaurante", example = "1", required = true)
 			Long restauranteId);
 	

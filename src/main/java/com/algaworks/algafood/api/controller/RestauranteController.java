@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 
 	@Override
 	@GetMapping
-	public ResponseEntity<List<RestauranteModel>> listar() {
+	public ResponseEntity<CollectionModel<RestauranteModel>> listar() {
 		var restaurantesModel = restauranteModelAssembler.toCollectionModel(restauranteService.listar());
 
 		return ResponseEntity.ok(restaurantesModel);
@@ -48,7 +49,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 
 	@Override
 	@GetMapping("/lista-personalizada")
-	public ResponseEntity<List<RestauranteModel>> listarPersonalizado(String nome, BigDecimal taxaFreteInicial,
+	public ResponseEntity<CollectionModel<RestauranteModel>> listarPersonalizado(String nome, BigDecimal taxaFreteInicial,
 			BigDecimal taxaFreteFinal) {
 
 		var restaurantesModel = restauranteModelAssembler

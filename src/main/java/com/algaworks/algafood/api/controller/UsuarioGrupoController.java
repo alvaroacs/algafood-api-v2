@@ -1,8 +1,10 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +31,13 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenAPI {
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<GrupoModel>> listar(@PathVariable Long usuarioId) {
+	public ResponseEntity<CollectionModel<GrupoModel>> listar(@PathVariable Long usuarioId) {
 		var grupos = usuarioGrupoService.listar(usuarioId);
 		var gruposModel = grupoModelAssembler.toCollectionModel(grupos);
+		
+		gruposModel.removeLinks()
+			.add(linkTo(methodOn(UsuarioGrupoController.class).listar(usuarioId)).withRel("grupos"));
+		
 		return ResponseEntity.ok(gruposModel);
 	}
 	

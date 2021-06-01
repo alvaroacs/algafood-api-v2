@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +38,7 @@ public class PermissaoController implements PermissaoControllerOpenAPI {
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<PermissaoModel>> listar() {
+	public ResponseEntity<CollectionModel<PermissaoModel>> listar() {
 		var permissoes = permissaoService.listar();
 		var permissoesModel = permissaoModelAssembler.toCollectionModel(permissoes);
 		return ResponseEntity.ok(permissoesModel);

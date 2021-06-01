@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +38,8 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<ProdutoModel>> listar(@PathVariable Long restauranteId, 
-			@RequestParam(name = "incluir-inativos", required = false, defaultValue = "false") boolean incluirInativos) {
+	public ResponseEntity<CollectionModel<ProdutoModel>> listar(@PathVariable Long restauranteId, 
+			@RequestParam(name = "incluir-inativos", required = false, defaultValue = "false") Boolean incluirInativos) {
 		var produtos = produtoService.listar(restauranteId, incluirInativos);
 		var produtosModel = produtoModelAssembler.toCollectionModel(produtos);
 		return ResponseEntity.ok(produtosModel);

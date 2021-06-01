@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -24,7 +23,7 @@ public interface UsuarioGrupoControllerOpenAPI {
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<GrupoModel>> listar(
+	public ResponseEntity<CollectionModel<GrupoModel>> listar(
 			@Parameter(description = "ID de um usuário", example = "1", required = true) Long usuarioId);
 	
 	@Operation(summary = "Associar grupo", description = "Associa um usuário a um grupo", tags = { "Usuarios" })

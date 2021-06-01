@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -27,7 +26,7 @@ public interface PermissaoControllerOpenAPI {
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<PermissaoModel>> listar();
+	public ResponseEntity<CollectionModel<PermissaoModel>> listar();
 	
 	@Operation(summary = "Buscar", description = "Busca uma permissão pelo ID", tags = { "Permissoes" })
 	@ApiResponses({

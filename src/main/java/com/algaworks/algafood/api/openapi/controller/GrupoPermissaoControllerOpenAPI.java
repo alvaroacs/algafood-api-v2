@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -28,7 +27,7 @@ public interface GrupoPermissaoControllerOpenAPI {
 		@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class)))
 	})
-	public ResponseEntity<List<PermissaoModel>> listar(
+	public ResponseEntity<CollectionModel<PermissaoModel>> listar(
 			@Parameter(description = "ID do grupo", example = "1") Long grupoId);
 	
 	@Operation(summary = "Associar Permissão", description = "Associa uma permissão ao grupo", tags = { "Grupos" })

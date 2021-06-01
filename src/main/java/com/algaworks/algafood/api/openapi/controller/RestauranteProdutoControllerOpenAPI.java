@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
@@ -27,11 +26,11 @@ public interface RestauranteProdutoControllerOpenAPI {
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<List<ProdutoModel>> listar(
+	public ResponseEntity<CollectionModel<ProdutoModel>> listar(
 			@Parameter(description = "ID do restaurante", example = "1", required = true)
 			Long restauranteId,
 			@Parameter(description = "Incluir produtos inativos", example = "false", required = false)
-			boolean incluirInativos);
+			Boolean incluirInativos);
 
 	@Operation(summary = "Buscar", description = "Busca o produto de um restaurante", tags = { "Produtos" })
 	@ApiResponses({

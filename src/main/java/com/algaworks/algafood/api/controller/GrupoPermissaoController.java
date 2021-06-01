@@ -1,8 +1,10 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,9 +30,13 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenAPI
 	private GrupoPermissaoService grupoPermissaoService;
 	
 	@GetMapping
-	public ResponseEntity<List<PermissaoModel>> listar(@PathVariable Long grupoId) {
+	public ResponseEntity<CollectionModel<PermissaoModel>> listar(@PathVariable Long grupoId) {
 		var permissoes = grupoPermissaoService.listar(grupoId);
 		var permissoesModel = permissaoModelAssembler.toCollectionModel(permissoes);
+		
+		permissoesModel.removeLinks()
+			.add(linkTo(methodOn(GrupoPermissaoController.class).listar(grupoId)).withRel("permissoes"));
+		
 		return ResponseEntity.ok(permissoesModel);
 	}
 	
