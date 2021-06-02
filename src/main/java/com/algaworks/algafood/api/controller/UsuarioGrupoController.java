@@ -1,8 +1,5 @@
 package com.algaworks.algafood.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.GrupoModelAssembler;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.openapi.controller.UsuarioGrupoControllerOpenAPI;
@@ -29,6 +27,9 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenAPI {
 	@Autowired
 	private UsuarioGrupoService usuarioGrupoService;
 	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<GrupoModel>> listar(@PathVariable Long usuarioId) {
@@ -36,7 +37,11 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenAPI {
 		var gruposModel = grupoModelAssembler.toCollectionModel(grupos);
 		
 		gruposModel.removeLinks()
-			.add(linkTo(methodOn(UsuarioGrupoController.class).listar(usuarioId)).withRel("grupos"));
+			.add(algaLinks.linkToUsuarioGrupo(usuarioId))
+			.add(algaLinks.linkToUsuarioGrupoAssociar(usuarioId, "associar"));
+		
+		gruposModel.getContent().forEach(grupoModel -> grupoModel.add(
+				algaLinks.linkToUsuarioGrupoDesassociar(usuarioId, grupoModel.getId(), "desassociar")));
 		
 		return ResponseEntity.ok(gruposModel);
 	}

@@ -1,12 +1,14 @@
 package com.algaworks.algafood.api.model;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class FotoProdutoModel {
+public class FotoProdutoModel extends RepresentationModel<FotoProdutoModel> {
 
 	@Schema(description = "Nome do arquivo", example = "foto.png")
 	private String nomeArquivo;
