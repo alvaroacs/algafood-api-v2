@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.controller.CidadeController;
 import com.algaworks.algafood.api.controller.CozinhaController;
 import com.algaworks.algafood.api.controller.EstadoController;
+import com.algaworks.algafood.api.controller.EstatisticaController;
 import com.algaworks.algafood.api.controller.FluxoPedidoController;
 import com.algaworks.algafood.api.controller.FormaPagamentoController;
 import com.algaworks.algafood.api.controller.GrupoController;
@@ -296,5 +297,22 @@ public class AlgaLinks {
 	
 	public Link linkToUsuarioGrupoDesassociar(Long usuarioId, Long grupoId, String rel) {
 		return linkTo(methodOn(UsuarioGrupoController.class).desassociar(usuarioId, grupoId)).withRel(rel);
+	}
+	
+	public Link linkToEstatisticas(String rel) {
+		return linkTo(EstatisticaController.class).withRel(rel);
+	}
+	
+	public Link linkToEstatisticasVendasDiaria(String rel) {
+		var filtroVariables = new TemplateVariables(
+					new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
+					new TemplateVariable("dataCriacaoInicio", VariableType.REQUEST_PARAM),
+					new TemplateVariable("dataCriacaoFim", VariableType.REQUEST_PARAM),
+					new TemplateVariable("timeOffset", VariableType.REQUEST_PARAM)
+				);
+		
+		var estatisticasUrl = linkTo(methodOn(EstatisticaController.class).consultarVendasDiarias(null, null)).toUri().toString();
+		
+		return Link.of(UriTemplate.of(estatisticasUrl, filtroVariables), rel);
 	}
 }
