@@ -14,12 +14,15 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.controller.CidadeController;
 import com.algaworks.algafood.api.controller.CozinhaController;
 import com.algaworks.algafood.api.controller.EstadoController;
+import com.algaworks.algafood.api.controller.FluxoPedidoController;
 import com.algaworks.algafood.api.controller.FormaPagamentoController;
 import com.algaworks.algafood.api.controller.GrupoController;
 import com.algaworks.algafood.api.controller.PedidoController;
 import com.algaworks.algafood.api.controller.PermissaoController;
 import com.algaworks.algafood.api.controller.RestauranteController;
+import com.algaworks.algafood.api.controller.RestauranteFormaPagamentoController;
 import com.algaworks.algafood.api.controller.RestauranteProdutoController;
+import com.algaworks.algafood.api.controller.RestauranteResponsavelController;
 import com.algaworks.algafood.api.controller.UsuarioController;
 import com.algaworks.algafood.api.controller.UsuarioGrupoController;
 
@@ -47,6 +50,18 @@ public class AlgaLinks {
 		return linkToPedidos(IanaLinkRelations.SELF_VALUE);
 	}
 	
+	public Link linkToPedidoConfirmacao(String codigo, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).confirmar(codigo)).withRel(rel);
+	}
+	
+	public Link linkToPedidoEntrega(String codigo, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).entregar(codigo)).withRel(rel);
+	}
+	
+	public Link linkToPedidoCancelar(String codigo, String rel) {
+		return linkTo(methodOn(FluxoPedidoController.class).cancelar(codigo)).withRel(rel);
+	}
+	
 	public Link linkToRestaurante(Long restauranteId, String rel) {
 		return linkTo(methodOn(RestauranteController.class).buscar(restauranteId)).withRel(rel);
 	}
@@ -61,6 +76,56 @@ public class AlgaLinks {
 	
 	public Link linkToRestaurantes() {
 		return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestauranteFormaPagamento(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class).listar(restauranteId)).withRel(rel);
+	}
+	
+	public Link linkToRestauranteFormaPagamento(Long restauranteId) {
+		return linkToRestauranteFormaPagamento(restauranteId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestauranteFormaPagamentoAssociar(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+				.associarFormaPagamento(restauranteId, null)).withRel(rel);
+	}
+	
+	public Link linkToRestauranteFormaPagamentoDesassociar(Long restauranteId, Long formaPagamentoId, String rel) {
+		return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+				.desassociarFormaPagamento(restauranteId, formaPagamentoId)).withRel(rel);
+	}
+	
+	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteResponsavelController.class).listar(restauranteId)).withRel(rel);
+	}
+	
+	public Link linkToRestaurnatesPersonalizado() {
+		var filtroVariables = new TemplateVariables(
+					new TemplateVariable("nome", VariableType.REQUEST_PARAM),
+					new TemplateVariable("taxaFreteInicial", VariableType.REQUEST_PARAM),
+					new TemplateVariable("taxaFreteFinal", VariableType.REQUEST_PARAM)
+				);
+		
+		var restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
+		
+		return Link.of(UriTemplate.of(restaurantesUrl, filtroVariables), IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestauranteAtivar(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).ativar(restauranteId)).withRel(rel);
+	}
+	
+	public Link linkToRestauranteInativar(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).inativar(restauranteId)).withRel(rel);
+	}
+	
+	public Link linkToRestauranteAbrir(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).abrir(restauranteId)).withRel(rel);
+	}
+	
+	public Link linkToRestauranteFechar(Long restauranteId, String rel) {
+		return linkTo(methodOn(RestauranteController.class).fechar(restauranteId)).withRel(rel);
 	}
 	
 	public Link linkToCliente(Long clienteId, String rel) {

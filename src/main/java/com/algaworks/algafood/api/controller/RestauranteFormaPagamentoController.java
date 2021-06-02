@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.openapi.controller.RestauranteFormaPagamentoControllerOpenAPI;
@@ -26,11 +27,24 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	@Autowired
 	private RestauranteFormaPagamentoService restauranteFormaPagamentoService;
 	
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	@Override
 	@GetMapping
 	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(@PathVariable Long restauranteId) {
 		var formasPagamento = restauranteFormaPagamentoService.listar(restauranteId);
 		var formasPagamentoModel = formaPagamentoModelAssembler.toCollectionModel(formasPagamento);
+		
+		formasPagamentoModel.removeLinks()
+			.add(algaLinks.linkToRestauranteFormaPagamento(restauranteId))
+			.add(algaLinks.linkToRestauranteFormaPagamentoAssociar(restauranteId, "associar"));
+		
+		formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
+			formaPagamentoModel.add(algaLinks
+					.linkToRestauranteFormaPagamentoDesassociar(restauranteId, formaPagamentoModel.getId(), "desassociar"));
+		});
+		
 		return ResponseEntity.ok(formasPagamentoModel);
 	}
 	

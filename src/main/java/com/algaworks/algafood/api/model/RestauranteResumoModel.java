@@ -1,5 +1,7 @@
 package com.algaworks.algafood.api.model;
 
+import java.math.BigDecimal;
+
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -17,4 +19,10 @@ public class RestauranteResumoModel extends RepresentationModel<RestauranteResum
 	
 	@Schema(description = "Nome do restaurante", example = "Thai Gourmet")
 	private String nome;
+	
+	@Schema(description = "Taxa frete", example = "1")
+	private BigDecimal taxaFrete;
+	
+	@Schema(implementation = CozinhaModel.class)
+	private CozinhaModel cozinha;
 }

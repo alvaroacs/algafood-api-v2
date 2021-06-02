@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.RestauranteModel;
+import com.algaworks.algafood.api.model.RestauranteResumoModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,20 +26,20 @@ public interface RestauranteControllerOpenAPI {
 	@Operation(summary = "Listar", description = "Lista os restaurantes", tags = { "Restaurantes" })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Sucesso na listagem dos restaurantes", 
-				content = @Content(array = @ArraySchema(schema = @Schema(implementation = RestauranteModel.class)))),
+				content = @Content(array = @ArraySchema(schema = @Schema(implementation = RestauranteResumoModel.class)))),
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<CollectionModel<RestauranteModel>> listar();
+	public ResponseEntity<CollectionModel<RestauranteResumoModel>> listar();
 
 	@Operation(summary = "Lista personalizada", description = "Lista os restaurantes", tags = { "Restaurantes" })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Sucesso na listagem dos restaurantes", 
-				content = @Content(array = @ArraySchema(schema = @Schema(implementation = RestauranteModel.class)))),
+				content = @Content(array = @ArraySchema(schema = @Schema(implementation = RestauranteResumoModel.class)))),
 			@ApiResponse(responseCode = "500", description = "Erro Interno no Servidor", 
 				content = @Content(schema = @Schema(implementation = Problem.class))) 
 	})
-	public ResponseEntity<CollectionModel<RestauranteModel>> listarPersonalizado(
+	public ResponseEntity<CollectionModel<RestauranteResumoModel>> listarPersonalizado(
 			@Parameter(description = "Nome do restaurante", example = "Tuk Tuk") String nome, 
 			@Parameter(description = "Taxa frete - valor inicial", example = "1") BigDecimal taxaFreteInicial,
 			@Parameter(description = "Taxa frete - valor final", example = "10") BigDecimal taxaFreteFinal);

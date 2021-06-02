@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
+import com.algaworks.algafood.api.assembler.RestauranteResumoModelAssembler;
 import com.algaworks.algafood.api.disassembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
+import com.algaworks.algafood.api.model.RestauranteResumoModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
@@ -37,23 +40,32 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	private RestauranteModelAssembler restauranteModelAssembler;
 	
 	@Autowired
+	private RestauranteResumoModelAssembler restauranteResumoModelAssembler;
+	
+	@Autowired
 	private RestauranteInputDisassembler restauranteInputDisassembler;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
 
 	@Override
 	@GetMapping
-	public ResponseEntity<CollectionModel<RestauranteModel>> listar() {
-		var restaurantesModel = restauranteModelAssembler.toCollectionModel(restauranteService.listar());
+	public ResponseEntity<CollectionModel<RestauranteResumoModel>> listar() {
+		var restaurantesModel = restauranteResumoModelAssembler.toCollectionModel(restauranteService.listar());
 
 		return ResponseEntity.ok(restaurantesModel);
 	}
 
 	@Override
 	@GetMapping("/lista-personalizada")
-	public ResponseEntity<CollectionModel<RestauranteModel>> listarPersonalizado(String nome, BigDecimal taxaFreteInicial,
+	public ResponseEntity<CollectionModel<RestauranteResumoModel>> listarPersonalizado(String nome, BigDecimal taxaFreteInicial,
 			BigDecimal taxaFreteFinal) {
 
-		var restaurantesModel = restauranteModelAssembler
+		var restaurantesModel = restauranteResumoModelAssembler
 				.toCollectionModel(restauranteService.listarPersonalizado(nome, taxaFreteInicial, taxaFreteFinal));
+		
+		restaurantesModel.removeLinks()
+			.add(algaLinks.linkToRestaurnatesPersonalizado());
 
 		return ResponseEntity.ok(restaurantesModel);
 	}
