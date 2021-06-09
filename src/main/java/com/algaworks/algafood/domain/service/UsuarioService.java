@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public List<Usuario> listar() {
 		return usuarioRepository.findAll();
@@ -52,11 +56,11 @@ public class UsuarioService {
 	public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
 		var usuario = buscar(usuarioId);
 
-		if (!usuario.getSenha().equals(senhaAtual)) {
+		if (!passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
 			throw new NegocioException("Senha atual informada, não coincide com a senha atual");
 		}
 
-		usuario.setSenha(novaSenha);
+		usuario.setSenha(passwordEncoder.encode(novaSenha));
 	}
 
 	private Usuario salvar(Usuario usuarioNovo) {
@@ -67,7 +71,9 @@ public class UsuarioService {
 			throw new NegocioException(String.format("Já existe um cadastro com o e-mail %s.", email));
 		}
 
-//		criptografar senha
+		if (usuarioNovo.isNovo()) {
+			usuarioNovo.setSenha(passwordEncoder.encode(usuarioNovo.getSenha()));
+		}
 
 		return usuarioRepository.save(usuarioNovo);
 	}
