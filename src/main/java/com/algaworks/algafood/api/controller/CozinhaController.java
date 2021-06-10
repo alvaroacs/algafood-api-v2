@@ -23,6 +23,7 @@ import com.algaworks.algafood.api.model.CozinhaModel;
 import com.algaworks.algafood.api.model.input.CozinhaInput;
 import com.algaworks.algafood.api.openapi.controller.CozinhaControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CozinhaService;
 
@@ -43,6 +44,7 @@ public class CozinhaController implements CozinhaControllerOpenAPI {
 	private CozinhaService cozinhaService;
 
 	@Override
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping
 	public ResponseEntity<PagedModel<CozinhaModel>> listar(Pageable pageable) {
 		var cozinhasPage = cozinhaService.listar(pageable);
@@ -53,6 +55,7 @@ public class CozinhaController implements CozinhaControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity<CozinhaModel> buscar(@PathVariable Long cozinhaId) {
 		var cozinhaModel = cozinhaModelAssembler.toModel(cozinhaService.buscar(cozinhaId));
@@ -60,6 +63,7 @@ public class CozinhaController implements CozinhaControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Cozinhas.PodeEditar
 	@PostMapping
 	public ResponseEntity<CozinhaModel> adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
 		var cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
@@ -70,6 +74,7 @@ public class CozinhaController implements CozinhaControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Cozinhas.PodeEditar
 	@PutMapping("/{cozinhaId}")
 	public ResponseEntity<CozinhaModel> atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInput cozinhaInput) {
 		var cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
@@ -80,6 +85,7 @@ public class CozinhaController implements CozinhaControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Cozinhas.PodeEditar
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Void> remover(@PathVariable Long cozinhaId) {
 		cozinhaService.remover(cozinhaId);
