@@ -23,6 +23,7 @@ import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
@@ -47,6 +48,9 @@ public class PedidoController implements PedidoControllerOpenAPI {
 	@Autowired
 	private PedidoService pedidoService;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@Override
 	@GetMapping
 	public ResponseEntity<PagedModel<PedidoResumoModel>> pesquisar(PedidoFilter pedidoFilter, Pageable pageable) {
@@ -70,7 +74,7 @@ public class PedidoController implements PedidoControllerOpenAPI {
 		var pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 		
 		var cliente = new Usuario();
-		cliente.setId(1L);
+		cliente.setId(algaSecurity.getUsuarioId());
 		
 		pedido.setCliente(cliente);
 		pedido = pedidoService.emitir(pedido);
