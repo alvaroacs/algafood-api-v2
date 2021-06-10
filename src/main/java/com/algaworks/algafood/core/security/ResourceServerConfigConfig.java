@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -33,8 +34,14 @@ public class ResourceServerConfigConfig extends WebSecurityConfigurerAdapter {
 			if (authorities == null) {
 				authorities = Collections.emptyList();
 			}
+			
+			var scopesAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+			var grantedAuthoritiesCollection = scopesAuthoritiesConverter.convert(jwt);
+			
+			grantedAuthoritiesCollection.addAll(
+					authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
-			return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+			return grantedAuthoritiesCollection;
 		});
 
 		return jwtAuthenticationConverter;
