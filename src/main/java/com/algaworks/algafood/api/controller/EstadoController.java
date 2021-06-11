@@ -21,6 +21,7 @@ import com.algaworks.algafood.api.model.EstadoModel;
 import com.algaworks.algafood.api.model.input.EstadoInput;
 import com.algaworks.algafood.api.openapi.controller.EstadoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.EstadoService;
 
 @RestController
@@ -37,6 +38,7 @@ public class EstadoController implements EstadoControllerOpenAPI {
 	private EstadoService estadoService;
 	
 	@Override
+	@CheckSecurity.Estados.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<EstadoModel>> listar() {
 		var estadosModel = estadoModelAssembler.toCollectionModel(estadoService.listar());
@@ -44,6 +46,7 @@ public class EstadoController implements EstadoControllerOpenAPI {
 	}
 
 	@Override
+	@CheckSecurity.Estados.PodeConsultar
 	@GetMapping("/{estadoId}")
 	public ResponseEntity<EstadoModel> buscar(@PathVariable Long estadoId) {
 		var estadoModel = estadoModelAssembler.toModel(estadoService.buscar(estadoId));
@@ -51,6 +54,7 @@ public class EstadoController implements EstadoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Estados.PodeEditar
 	@PostMapping
 	public ResponseEntity<EstadoModel> adicionar(@RequestBody @Valid EstadoInput estadoInput) {
 		var estado = estadoInputDisassembler.toDomainObject(estadoInput);
@@ -61,6 +65,7 @@ public class EstadoController implements EstadoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Estados.PodeEditar
 	@PutMapping("/{estadoId}")
 	public ResponseEntity<EstadoModel> atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput) {
 		var estado = estadoInputDisassembler.toDomainObject(estadoInput);
@@ -71,6 +76,7 @@ public class EstadoController implements EstadoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Estados.PodeEditar
 	@DeleteMapping("/{estadoId}")
 	public ResponseEntity<Void> remover(@PathVariable Long estadoId) {
 		estadoService.remover(estadoId);
