@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.openapi.controller.RestauranteFormaPagamentoControllerOpenAPI;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.RestauranteFormaPagamentoService;
 
@@ -31,6 +32,9 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@Override
 	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
@@ -39,13 +43,16 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 		var formasPagamentoModel = formaPagamentoModelAssembler.toCollectionModel(formasPagamento);
 		
 		formasPagamentoModel.removeLinks()
-			.add(algaLinks.linkToRestauranteFormaPagamento(restauranteId))
-			.add(algaLinks.linkToRestauranteFormaPagamentoAssociar(restauranteId, "associar"));
+			.add(algaLinks.linkToRestauranteFormaPagamento(restauranteId));
 		
-		formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
-			formaPagamentoModel.add(algaLinks
-					.linkToRestauranteFormaPagamentoDesassociar(restauranteId, formaPagamentoModel.getId(), "desassociar"));
-		});
+		if (algaSecurity.podeGerenciarFuncionamentoRestaurantes(restauranteId)) {
+			formasPagamentoModel.add(algaLinks.linkToRestauranteFormaPagamentoAssociar(restauranteId, "associar"));
+			
+			formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
+				formaPagamentoModel.add(algaLinks
+						.linkToRestauranteFormaPagamentoDesassociar(restauranteId, formaPagamentoModel.getId(), "desassociar"));
+			});
+		}
 		
 		return ResponseEntity.ok(formasPagamentoModel);
 	}

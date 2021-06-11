@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.model.UsuarioModel;
 import com.algaworks.algafood.api.openapi.controller.RestauranteResponsavelControllerOpenAPI;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.RestauranteResponsavelService;
 
@@ -31,6 +32,9 @@ public class RestauranteResponsavelController implements RestauranteResponsavelC
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@Override
 	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
@@ -39,11 +43,14 @@ public class RestauranteResponsavelController implements RestauranteResponsavelC
 		var usuariosModel = usuarioModelAssembler.toCollectionModel(usuarios);
 		
 		usuariosModel.removeLinks()
-			.add(algaLinks.linkToRestauranteResponsaveis(restauranteId))
-			.add(algaLinks.linkToRestauranteResponsavelAssociar(restauranteId, "associar"));
+			.add(algaLinks.linkToRestauranteResponsaveis(restauranteId));
 		
-		usuariosModel.getContent().forEach(usuarioModel -> usuarioModel.add(
-				algaLinks.linkToRestauranteResponsavelDesassociar(restauranteId, restauranteId, "desassociar")));
+		if (algaSecurity.podeGerenciarCadastroRestaurantes()) {
+			usuariosModel.add(algaLinks.linkToRestauranteResponsavelAssociar(restauranteId, "associar"));
+		
+			usuariosModel.getContent().forEach(usuarioModel -> usuarioModel.add(
+					algaLinks.linkToRestauranteResponsavelDesassociar(restauranteId, restauranteId, "desassociar")));
+		}
 		
 		return ResponseEntity.ok(usuariosModel);
 	}
