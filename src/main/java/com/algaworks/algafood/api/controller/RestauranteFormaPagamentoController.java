@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.FormaPagamentoModelAssembler;
 import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.openapi.controller.RestauranteFormaPagamentoControllerOpenAPI;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.RestauranteFormaPagamentoService;
 
 @RestController
@@ -31,6 +32,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	private AlgaLinks algaLinks;
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(@PathVariable Long restauranteId) {
 		var formasPagamento = restauranteFormaPagamentoService.listar(restauranteId);
@@ -49,6 +51,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping("/{formaPagamentoId}")
 	public ResponseEntity<Void> associarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
 		restauranteFormaPagamentoService.associarFormaPagamento(restauranteId, formaPagamentoId);
@@ -56,6 +59,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@DeleteMapping("/{formaPagamentoId}")
 	public ResponseEntity<Void> desassociarFormaPagamento(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
 		restauranteFormaPagamentoService.desassociarFormaPagamento(restauranteId, formaPagamentoId);

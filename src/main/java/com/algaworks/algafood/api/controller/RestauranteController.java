@@ -27,6 +27,7 @@ import com.algaworks.algafood.api.model.RestauranteResumoModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.RestauranteService;
 
 @RestController
@@ -49,6 +50,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	private AlgaLinks algaLinks;
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<RestauranteResumoModel>> listar() {
 		var restaurantesModel = restauranteResumoModelAssembler.toCollectionModel(restauranteService.listar());
@@ -57,6 +59,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/lista-personalizada")
 	public ResponseEntity<CollectionModel<RestauranteResumoModel>> listarPersonalizado(String nome, BigDecimal taxaFreteInicial,
 			BigDecimal taxaFreteFinal) {
@@ -71,6 +74,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping("/{restauranteId}")
 	public ResponseEntity<RestauranteModel> buscar(@PathVariable Long restauranteId) {
 		var restauranteModel = restauranteModelAssembler.toModel(restauranteService.buscar(restauranteId));
@@ -79,6 +83,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PostMapping
 	public ResponseEntity<RestauranteModel> adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 		var restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
@@ -90,6 +95,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/{restauranteId}")
 	public ResponseEntity<RestauranteModel> atualizar(@PathVariable Long restauranteId,
 			@RequestBody @Valid RestauranteInput restauranteInput) {
@@ -102,6 +108,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/{restauranteId}/ativo")
 	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
 		restauranteService.ativar(restauranteId);
@@ -109,6 +116,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/ativacoes")
 	public ResponseEntity<Void> ativar(@RequestBody List<Long> restaurantesId) {
 		restauranteService.ativar(restaurantesId);
@@ -116,6 +124,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping("/{restauranteId}/ativo")
 	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
 		restauranteService.inativar(restauranteId);
@@ -123,6 +132,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping("/ativacoes")
 	public ResponseEntity<Void> inativar(@RequestBody List<Long> restaurantesId) {
 		restauranteService.inativar(restaurantesId);
@@ -130,6 +140,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping("/{restauranteId}/abertura")
 	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		restauranteService.abrir(restauranteId);
@@ -137,6 +148,7 @@ public class RestauranteController implements RestauranteControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@DeleteMapping("/{restauranteId}/fechamento")
 	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		restauranteService.fechar(restauranteId);

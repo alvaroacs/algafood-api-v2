@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.model.UsuarioModel;
 import com.algaworks.algafood.api.openapi.controller.RestauranteResponsavelControllerOpenAPI;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.RestauranteResponsavelService;
 
 @RestController
@@ -31,6 +32,7 @@ public class RestauranteResponsavelController implements RestauranteResponsavelC
 	private AlgaLinks algaLinks;
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<UsuarioModel>> listar(@PathVariable Long restauranteId) {
 		var usuarios = restauranteResponsavelService.listar(restauranteId);
@@ -47,6 +49,7 @@ public class RestauranteResponsavelController implements RestauranteResponsavelC
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping("/{responsavelId}")
 	public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long responsavelId) {
 		restauranteResponsavelService.associar(restauranteId, responsavelId);
@@ -54,6 +57,7 @@ public class RestauranteResponsavelController implements RestauranteResponsavelC
 	}
 	
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@DeleteMapping("/{responsavelId}")
 	public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long responsavelId) {
 		restauranteResponsavelService.desassociar(restauranteId, responsavelId);

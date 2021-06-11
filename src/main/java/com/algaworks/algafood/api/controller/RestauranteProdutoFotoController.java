@@ -24,6 +24,7 @@ import com.algaworks.algafood.api.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.model.FotoProdutoModel;
 import com.algaworks.algafood.api.model.input.FotoProdutoInput;
 import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenAPI;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
@@ -39,6 +40,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 	private CatalogoFotoProdutoService catalogoFotoProdutoService;
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<FotoProdutoModel> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		var fotoProduto = catalogoFotoProdutoService.buscar(restauranteId, produtoId);
@@ -71,6 +73,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 	}
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<FotoProdutoModel> atualizarFoto(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
@@ -91,6 +94,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 	}
 
 	@Override
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@DeleteMapping
 	public ResponseEntity<Void> remover(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		catalogoFotoProdutoService.remover(restauranteId, produtoId);

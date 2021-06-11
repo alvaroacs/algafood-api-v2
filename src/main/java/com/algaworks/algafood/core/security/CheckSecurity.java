@@ -6,6 +6,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public @interface CheckSecurity {
@@ -14,12 +15,49 @@ public @interface CheckSecurity {
 		
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		@PreAuthorize("isAuthenticated()")
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
 		public @interface PodeConsultar { }
 		
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		@PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')")
 		public @interface PodeEditar { }
+	}
+	
+	public @interface Restaurantes {
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		public @interface PodeConsultar { }
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
+		public @interface PodeGerenciarCadastro { }
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_RESTAURANTES') "
+				+ "or @algaSecurity.gerenciaRestaurante(#restauranteId))")
+		public @interface PodeGerenciarFuncionamento { }
+	}
+	
+	public @interface Pedidos {
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or "
+				+ "@algaSecurity.getUsuarioId() == returnObject.body.cliente.id or "
+				+ "@algaSecurity.gerenciaRestaurante(returnObject.body.restaurante.id)")
+		public @interface PodeBuscar { }
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
+				+ "@algaSecurity.getUsuarioId == #pedidoFilter.clienteId or"
+				+ "@algaSecurity.gerenciaRestaurante(#pedidoFilter.restauranteId))")
+		public @interface PodePesquisar { }
 	}
 }

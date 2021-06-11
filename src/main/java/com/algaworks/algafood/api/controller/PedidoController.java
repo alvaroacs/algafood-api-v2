@@ -24,6 +24,7 @@ import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
 import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
@@ -52,6 +53,7 @@ public class PedidoController implements PedidoControllerOpenAPI {
 	private AlgaSecurity algaSecurity;
 	
 	@Override
+	@CheckSecurity.Pedidos.PodePesquisar
 	@GetMapping
 	public ResponseEntity<PagedModel<PedidoResumoModel>> pesquisar(PedidoFilter pedidoFilter, Pageable pageable) {
 		var pedidosPage = pedidoService.pesquisar(pedidoFilter, pageable);
@@ -61,6 +63,7 @@ public class PedidoController implements PedidoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Pedidos.PodeBuscar
 	@GetMapping("/{pedidoCodigo}")
 	public ResponseEntity<PedidoModel> buscar(@PathVariable String pedidoCodigo) {
 		var pedido = pedidoService.buscar(pedidoCodigo);
