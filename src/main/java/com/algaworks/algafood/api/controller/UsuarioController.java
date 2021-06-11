@@ -22,6 +22,7 @@ import com.algaworks.algafood.api.model.input.UsuarioComSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.api.openapi.controller.UsuarioControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.UsuarioService;
 
 @RestController
@@ -38,6 +39,7 @@ public class UsuarioController implements UsuarioControllerOpenAPI {
 	private UsuarioService usuarioService;
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<UsuarioModel>> listar() {
 		var usuariosModel = usuarioModelAssembler.toCollectionModel(usuarioService.listar());
@@ -45,6 +47,7 @@ public class UsuarioController implements UsuarioControllerOpenAPI {
 	}
 
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping("/{usuarioId}")
 	public ResponseEntity<UsuarioModel> buscar(@PathVariable Long usuarioId) {
 		var usuarioModel = usuarioModelAssembler.toModel(usuarioService.buscar(usuarioId));
@@ -61,6 +64,7 @@ public class UsuarioController implements UsuarioControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
 	@PutMapping("/{usuarioId}")
 	public ResponseEntity<UsuarioModel> atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
 		var usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
@@ -70,6 +74,7 @@ public class UsuarioController implements UsuarioControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
 	@PutMapping("/{usuarioId}/senha")
 	public ResponseEntity<Void> alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senhaInput) {
 		usuarioService.alterarSenha(usuarioId, senhaInput.getSenhaAtual(), senhaInput.getNovaSenha());

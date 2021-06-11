@@ -97,4 +97,36 @@ public @interface CheckSecurity {
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_CIDADES')")
 		public @interface PodeEditar { }
 	}
+	
+	public @interface UsuariosGruposPermissoes {
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and @algaSecurity.getUsuarioId() == #usuarioId")
+		public @interface PodeAlterarPropriaSenha { }
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or "
+				+ "@algaSecurity.getUsuarioId() == #usuarioId)")
+		public @interface PodeAlterarUsuario { }
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES')")
+		public @interface PodeEditar { }
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES')")
+		public @interface PodeConsultar { }
+	}
+	
+	public @interface Estatisticas {
+		
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		@PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('GERAR_RELATORIOS')")
+		public @interface PodeConsultar { }
+	}
 }

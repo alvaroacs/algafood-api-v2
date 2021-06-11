@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.assembler.PermissaoModelAssembler;
 import com.algaworks.algafood.api.model.PermissaoModel;
 import com.algaworks.algafood.api.openapi.controller.GrupoPermissaoControllerOpenAPI;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.GrupoPermissaoService;
 
 @RestController
@@ -30,6 +31,8 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenAPI
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<PermissaoModel>> listar(@PathVariable Long grupoId) {
 		var permissoes = grupoPermissaoService.listar(grupoId);
@@ -45,12 +48,16 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenAPI
 		return ResponseEntity.ok(permissoesModel);
 	}
 	
+	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PutMapping("/{permissaoId}")
 	public ResponseEntity<Void> associarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		grupoPermissaoService.associarPermissao(grupoId, permissaoId);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@DeleteMapping("/{permissaoId}")
 	public ResponseEntity<Void> desassociarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		grupoPermissaoService.desassociarPermissao(grupoId, permissaoId);

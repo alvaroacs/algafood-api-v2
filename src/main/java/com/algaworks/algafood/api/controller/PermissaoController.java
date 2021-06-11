@@ -21,6 +21,7 @@ import com.algaworks.algafood.api.model.PermissaoModel;
 import com.algaworks.algafood.api.model.input.PermissaoInput;
 import com.algaworks.algafood.api.openapi.controller.PermissaoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.PermissaoService;
 
 @RestController
@@ -37,6 +38,7 @@ public class PermissaoController implements PermissaoControllerOpenAPI {
 	private PermissaoService permissaoService;
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<PermissaoModel>> listar() {
 		var permissoes = permissaoService.listar();
@@ -45,6 +47,7 @@ public class PermissaoController implements PermissaoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping("/{permissaoId}")
 	public ResponseEntity<PermissaoModel> buscar(@PathVariable Long permissaoId) {
 		var permissao = permissaoService.buscar(permissaoId);
@@ -53,6 +56,7 @@ public class PermissaoController implements PermissaoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PostMapping
 	public ResponseEntity<PermissaoModel> adicionar(@RequestBody @Valid PermissaoInput permissaoInput) {
 		var permissao = permissaoInputDisassembler.toDomainObject(permissaoInput);
@@ -62,6 +66,7 @@ public class PermissaoController implements PermissaoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PutMapping("/{permissaoId}")
 	public ResponseEntity<PermissaoModel> atualizar(@PathVariable Long permissaoId, @RequestBody PermissaoInput permissaoInput) {
 		var permissao = permissaoInputDisassembler.toDomainObject(permissaoInput);
@@ -71,6 +76,7 @@ public class PermissaoController implements PermissaoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@DeleteMapping("/{permissaoId}")
 	public ResponseEntity<Void> remover(@PathVariable Long permissaoId) {
 		permissaoService.remover(permissaoId);
