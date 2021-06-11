@@ -72,6 +72,7 @@ public class PedidoController implements PedidoControllerOpenAPI {
 	}
 	
 	@Override
+	@CheckSecurity.Pedidos.PodeEmitir
 	@PostMapping
 	public ResponseEntity<PedidoModel> emitir(@RequestBody @Valid PedidoInput pedidoInput) {
 		var pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
