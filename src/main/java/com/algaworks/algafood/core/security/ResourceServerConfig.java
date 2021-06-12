@@ -3,6 +3,8 @@ package com.algaworks.algafood.core.security;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,17 +15,20 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ResourceServerConfigConfig extends WebSecurityConfigurerAdapter {
+public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-			.csrf().disable()
-			.cors()
+		http.formLogin().loginPage("/login")
 			.and()
-			.oauth2ResourceServer()
-				.jwt()
-				.jwtAuthenticationConverter(jwtAuthenticationConverter());
+				.authorizeRequests().antMatchers("/oauth/**").authenticated()
+			.and()
+				.csrf().disable()
+				.cors()
+			.and()
+				.oauth2ResourceServer()
+					.jwt()
+					.jwtAuthenticationConverter(jwtAuthenticationConverter());
 	}
 
 	private JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -34,16 +39,22 @@ public class ResourceServerConfigConfig extends WebSecurityConfigurerAdapter {
 			if (authorities == null) {
 				authorities = Collections.emptyList();
 			}
-			
+
 			var scopesAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 			var grantedAuthoritiesCollection = scopesAuthoritiesConverter.convert(jwt);
-			
-			grantedAuthoritiesCollection.addAll(
-					authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+
+			grantedAuthoritiesCollection
+					.addAll(authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
 			return grantedAuthoritiesCollection;
 		});
 
 		return jwtAuthenticationConverter;
+	}
+
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 }

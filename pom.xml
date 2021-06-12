@@ -28,6 +28,11 @@
 
 		<!-- OpenAPI -->
 		<openapi-version>1.5.9</openapi-version>
+		
+		<!-- Spring Security Authorization Server -->
+		<spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
+
+		<spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -140,6 +145,26 @@
 			<artifactId>jasperreports-functions</artifactId>
 			<version>${jasperreports.version}</version>
 		</dependency>
+		
+		<!-- OAuth Authorization Server -->
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>${spring-security-oauth2.version}</version>
+		</dependency>
+
+		<!-- Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- JWT -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>${spring-security-jwt.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -151,6 +176,10 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 	</dependencies>
 
