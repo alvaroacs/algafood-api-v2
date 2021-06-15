@@ -47,6 +47,7 @@ public class CozinhaController implements CozinhaControllerOpenAPI {
 	@CheckSecurity.Cozinhas.PodeConsultar
 	@GetMapping
 	public ResponseEntity<PagedModel<CozinhaModel>> listar(Pageable pageable) {
+		System.out.println("Veio aqui");
 		var cozinhasPage = cozinhaService.listar(pageable);
 		
 		var pagedModel = pagedResourcesAssembler.toModel(cozinhasPage, cozinhaModelAssembler);
