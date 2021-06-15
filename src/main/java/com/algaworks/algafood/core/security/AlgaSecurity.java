@@ -117,9 +117,6 @@ public class AlgaSecurity {
 	}
 	
 	public boolean podeConsultarCozinhas() {
-		System.out.println(">>>>>> tá vindo aqui");
-		System.out.println(temEscopoLeitura());
-		System.out.println(isAutenticado());
 		return temEscopoLeitura() && isAutenticado();
 	}
 	
