@@ -19,11 +19,13 @@ services:
     command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "-Dspring.profiles.active=dev", "algafood.jar"]
     environment:
       DB_HOST: algafood-mysql
+      SPRING_SESSION_STORE_TYPE:  redis
+      SPRING_REDIS_HOST:  algafood-redis
     networks:
       - algafood-network
     depends_on:
       - algafood-mysql
-      
+      - algafood-redis
       
   algafood-proxy:
     build: ./nginx
@@ -35,3 +37,8 @@ services:
     depends_on:
       - algafood-api
     
+  algafood-redis:
+    image: redis:6.2.1-alpine
+    networks:
+      - algafood-network
+  

@@ -30,7 +30,7 @@
 		<openapi-version>1.5.9</openapi-version>
 
 		<!-- Spring Security Authorization Server -->
-		<spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
+		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
 
 		<spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
 
@@ -156,12 +156,6 @@
 			<version>${spring-security-oauth2.version}</version>
 		</dependency>
 
-		<!-- Redis -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-
 		<!-- JWT -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -183,6 +177,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
 		</dependency>
 	</dependencies>
 
