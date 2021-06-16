@@ -7,13 +7,10 @@ import org.apache.commons.codec.CharEncoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.algaworks.algafood.core.email.EmailProperties;
 import com.algaworks.algafood.domain.dto.Mensagem;
 import com.algaworks.algafood.domain.service.EnvioEmailService;
-
-import freemarker.template.Configuration;
 
 public class SmtpEmailService implements EnvioEmailService {
 
@@ -24,7 +21,7 @@ public class SmtpEmailService implements EnvioEmailService {
 	private EmailProperties emailProperties;
 
 	@Autowired
-	private Configuration freemarkerConfig;
+	private ProcessadorEmailTemplate processarEmailTemplate;
 
 	@Override
 	public void enviar(Mensagem mensagem) {
@@ -38,7 +35,7 @@ public class SmtpEmailService implements EnvioEmailService {
 	}
 
 	protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
-		var corpo = processarTemplate(mensagem);
+		var corpo = processarEmailTemplate.processarTemplate(mensagem);
 
 		var mimeMessage = mailSender.createMimeMessage();
 
@@ -53,13 +50,5 @@ public class SmtpEmailService implements EnvioEmailService {
 		return mimeMessage;
 	}
 
-	protected String processarTemplate(Mensagem mensagem) {
-		try {
-			var template = freemarkerConfig.getTemplate(mensagem.getCorpo());
-			return FreeMarkerTemplateUtils.processTemplateIntoString(template, mensagem.getVariaveis());
-		} catch (Exception e) {
-			throw new EmailException("Não foi possível processar o template do e-mail", e);
-		}
-	}
 
 }
