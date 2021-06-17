@@ -27,6 +27,7 @@ import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.model.input.FormaPagamentoInput;
 import com.algaworks.algafood.api.openapi.controller.FormaPagamentoControllerOpenAPI;
 import com.algaworks.algafood.api.util.ApiUtils;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.service.FormaPagamentoService;
 
 @RestController
@@ -43,6 +44,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenAPI
 	private FormaPagamentoService formaPagamentoService;
 
 	@Override
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	@GetMapping
 	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -66,6 +68,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenAPI
 	}
 
 	@Override
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	@GetMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId) {
 		var formaPagamento = formaPagamentoService.buscar(formaPagamentoId);
@@ -75,6 +78,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenAPI
 	}
 
 	@Override
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@PostMapping
 	public ResponseEntity<FormaPagamentoModel> adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 		var formaPagamento = formaPagamentoInputDisassembler.toDomainObject(formaPagamentoInput);
@@ -84,6 +88,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenAPI
 	}
 
 	@Override
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@PutMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> atualizar(@PathVariable Long formaPagamentoId,
 			@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -94,6 +99,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenAPI
 	}
 
 	@Override
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@DeleteMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> remover(@PathVariable Long formaPagamentoId) {
 		formaPagamentoService.remover(formaPagamentoId);

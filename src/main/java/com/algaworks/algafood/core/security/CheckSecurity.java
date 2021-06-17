@@ -123,4 +123,17 @@ public @interface CheckSecurity {
 		@PreAuthorize("@algaSecurity.podeConsultarEstatisticas()")
 		public @interface PodeConsultar { }
 	}
+	
+	public @interface FormasPagamento {
+		
+		@PreAuthorize("@algaSecurity.podeConsultarFormasPagamento()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeConsultar { }
+		
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_FORMAS_PAGAMENTO')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeEditar { }
+	}
 }
