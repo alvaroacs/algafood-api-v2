@@ -9,4 +9,4 @@ RUN chmod +x /wait-for-it.sh
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "-Dspring.profiles.active=dev", "algafood.jar"]
+CMD ["java", "-jar", "algafood.jar"]
