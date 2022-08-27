@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.4</version>
+		<version>2.7.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.algaworks</groupId>
@@ -18,24 +18,19 @@
 		<java.version>11</java.version>
 
 		<!-- Object Mapper -->
-		<modelmapper.version>2.4.1</modelmapper.version>
+		<modelmapper.version>3.0.0</modelmapper.version>
 
 		<!-- JasperReports -->
-		<jasperreports.version>6.17.0</jasperreports.version>
+		<jasperreports.version>6.19.1</jasperreports.version>
 
 		<!-- S3 Amazon -->
-		<aws-java-sdk-s3.version>1.11.671</aws-java-sdk-s3.version>
+		<aws-java-sdk-s3.version>1.12.204</aws-java-sdk-s3.version>
 
 		<!-- OpenAPI -->
-		<openapi-version>1.5.9</openapi-version>
-
-		<!-- Spring Security Authorization Server -->
-		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
-
-		<spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
-
-		<!-- Docker maven -->
-<!-- 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version> -->
+		<openapi-version>1.6.9</openapi-version>
+		
+		<!-- Authorization Server -->
+		<spring-auth-server.version>0.3.1</spring-auth-server.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -60,6 +55,11 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -80,10 +80,10 @@
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.nimbusds</groupId>
-			<artifactId>oauth2-oidc-sdk</artifactId>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-authorization-server</artifactId>
+			<version>${spring-auth-server.version}</version>
 		</dependency>
-
 
 		<!-- Object Mapper -->
 		<dependency>
@@ -149,20 +149,6 @@
 			<version>${jasperreports.version}</version>
 		</dependency>
 
-		<!-- OAuth Authorization Server -->
-		<dependency>
-			<groupId>org.springframework.security.oauth</groupId>
-			<artifactId>spring-security-oauth2</artifactId>
-			<version>${spring-security-oauth2.version}</version>
-		</dependency>
-
-		<!-- JWT -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-jwt</artifactId>
-			<version>${spring-security-jwt.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -198,37 +184,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>docker</id>
-
-<!-- 			<build> -->
-<!-- 				<plugins> -->
-<!-- 					<plugin> -->
-<!-- 						<groupId>com.spotify</groupId> -->
-<!-- 						<artifactId>dockerfile-maven-plugin</artifactId> -->
-<!-- 						<version>${dockerfile-maven-version}</version> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<id>default</id> -->
-<!-- 								<goals> -->
-<!-- 									<goal>build</goal> -->
-<!-- 									<goal>push</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 						<configuration> -->
-<!-- 							<repository>algafood-api</repository> -->
-<!-- 							<buildArgs> -->
-<!-- 								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE> -->
-<!-- 							</buildArgs> -->
-<!-- 						</configuration> -->
-<!-- 					</plugin> -->
-<!-- 				</plugins> -->
-<!-- 			</build> -->
-		</profile>
-
-	</profiles>
-
 </project>
